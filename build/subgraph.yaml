@@ -23,7 +23,7 @@ dataSources:
         - WithdrawReward
       abis:
         - name: DreamChallenge
-          file: DreamChallenge\abis\DreamChallenge.json
+          file: DreamChallenge/abis/DreamChallenge.json
       eventHandlers:
         - event: AddChallenge(indexed
             address,uint8,uint16,uint16,uint16,uint256,uint256,uint256,uint256)
@@ -41,4 +41,4 @@ dataSources:
           handler: handleOwnershipTransferred
         - event: WithdrawReward(indexed address,uint16,uint256)
           handler: handleWithdrawReward
-      file: DreamChallenge\DreamChallenge.wasm
+      file: DreamChallenge/DreamChallenge.wasm

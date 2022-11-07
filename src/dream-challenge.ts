@@ -115,17 +115,16 @@ export function handleEnterChallenge(event: EnterChallenge): void {
   }
 
   let challenges = entity.challenges;
+  let isHas = false;
   for(let i = 0; i < challenges.length; ++i) {
     if(challenges[i] ===  userinfoId){
-      challenges[i] = userinfo.id;
+      // challenges[i] = userinfo.id;
+      isHas = true;
       break;
     }
-    if(i === challenges.length - 1) {
-      challenges.push(userinfo.id)
-    }
   }
-  if(challenges.length === 0) {
-    challenges.push(userinfo.id)
+  if(isHas === false) {
+    challenges.push(userinfo.id);
   }
   entity.challenges = challenges;
   entity.save();
