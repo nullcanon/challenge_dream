@@ -246,7 +246,7 @@ export class UserInfo extends Entity {
   }
 }
 
-export class UserInfos extends Entity {
+export class UserChallenge extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -254,18 +254,18 @@ export class UserInfos extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save UserInfos entity without an ID");
+    assert(id != null, "Cannot save UserChallenge entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        `Entities of type UserInfos must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+        `Entities of type UserChallenge must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
-      store.set("UserInfos", id.toString(), this);
+      store.set("UserChallenge", id.toString(), this);
     }
   }
 
-  static load(id: string): UserInfos | null {
-    return changetype<UserInfos | null>(store.get("UserInfos", id));
+  static load(id: string): UserChallenge | null {
+    return changetype<UserChallenge | null>(store.get("UserChallenge", id));
   }
 
   get id(): string {
@@ -277,20 +277,12 @@ export class UserInfos extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get challenges(): Array<string> | null {
+  get challenges(): Array<string> {
     let value = this.get("challenges");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toStringArray();
-    }
+    return value!.toStringArray();
   }
 
-  set challenges(value: Array<string> | null) {
-    if (!value) {
-      this.unset("challenges");
-    } else {
-      this.set("challenges", Value.fromStringArray(<Array<string>>value));
-    }
+  set challenges(value: Array<string>) {
+    this.set("challenges", Value.fromStringArray(value));
   }
 }

@@ -1,0 +1,44 @@
+specVersion: 0.0.4
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum
+    name: DreamChallenge
+    network: chapel
+    source:
+      address: "0x532c950C5E009939F0F87F91C7325E78325Dc6c5"
+      abi: DreamChallenge
+      startBlock: 24377696
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - AddChallenge
+        - EnterChallenge
+        - ModificationAdmin
+        - ModifyChallenge
+        - OpenChallenge
+        - OwnershipTransferred
+        - WithdrawReward
+      abis:
+        - name: DreamChallenge
+          file: DreamChallenge\abis\DreamChallenge.json
+      eventHandlers:
+        - event: AddChallenge(indexed
+            address,uint8,uint16,uint16,uint16,uint256,uint256,uint256,uint256)
+          handler: handleAddChallenge
+        - event: EnterChallenge(indexed address,uint16,uint8,uint256,uint256)
+          handler: handleEnterChallenge
+        - event: ModificationAdmin(indexed address,bool,bool)
+          handler: handleModificationAdmin
+        - event: ModifyChallenge(indexed
+            address,uint8,uint16,uint16,uint16,uint256,uint256,uint256,uint256)
+          handler: handleModifyChallenge
+        - event: OpenChallenge(indexed address,uint16,uint8,uint256)
+          handler: handleOpenChallenge
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: WithdrawReward(indexed address,uint16,uint256)
+          handler: handleWithdrawReward
+      file: DreamChallenge\DreamChallenge.wasm

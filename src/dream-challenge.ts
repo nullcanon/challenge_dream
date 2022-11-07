@@ -9,7 +9,7 @@ import {
   OwnershipTransferred,
   WithdrawReward
 } from "../generated/DreamChallenge/DreamChallenge"
-import { ChallengeInfo, UserInfo, UserInfos } from "../generated/schema"
+import { ChallengeInfo, UserInfo, UserChallenge } from "../generated/schema"
 
 export function handleAddChallenge(event: AddChallenge): void {
 
@@ -51,7 +51,7 @@ export function handleAddChallenge(event: AddChallenge): void {
   // - contract.challengeIdInex(...)
   // - contract.getChallengeInfo(...)
   // - contract.getUserChallengeInfo(...)
-  // - contract.getUserChallenges(...)
+  // - contract.getUserChallenge(...)
   // - contract.getUserRewards(...)
   // - contract.isAdmin(...)
   // - contract.nftCost(...)
@@ -64,26 +64,22 @@ export function handleAddChallenge(event: AddChallenge): void {
 }
 
 export function handleEnterChallenge(event: EnterChallenge): void {
-  let entity = UserInfos.load(event.params.user.toHexString());
+  let entity = UserChallenge.load(event.params.user.toHexString());
   
   if (!entity) {
-    entity = new UserInfos(event.params.user.toHexString());
+    entity = new UserChallenge(event.params.user.toHexString());
     entity.challenges = []
   }
 
-  let userinfo = UserInfo.load(
-    event.params.user
-    .toHexString()
-    .concat('-')
-    .concat(BigInt.fromI32(event.params.challengeId).toString())
-    );
-  if (!userinfo) {
-    userinfo = new UserInfo(    
-      event.params.user
-      .toHexString()
-      .concat('-')
-      .concat(BigInt.fromI32(event.params.challengeId).toString()));
+  let userinfoId = event.params.user
+  .toHexString()
+  .concat('-')
+  .concat(BigInt.fromI32(event.params.challengeId).toString());
 
+  let userinfo = UserInfo.load(userinfoId);
+    
+  if (!userinfo) {
+    userinfo = new UserInfo(userinfoId);
     userinfo.challenge = BigInt.fromI32(event.params.challengeId).toString();
     userinfo.isTakeReward = false;
     userinfo.amountsLeft = BigInt.fromI32(0);
@@ -92,36 +88,49 @@ export function handleEnterChallenge(event: EnterChallenge): void {
     userinfo.amountMiddleR = BigInt.fromI32(0);
   }
 
-  if(event.params.target === 1) {
+  let challenge = ChallengeInfo.load(event.params.challengeId.toString());
+  if (!challenge) {
+    challenge = new ChallengeInfo(event.params.challengeId.toString());
+  }
+
+  if(BigInt.fromI32(event.params.target).equals(BigInt.fromI32(1))) {
     //left
-    userinfo.amountsLeft.plus(event.params.amount);
-  } else if(event.params.target === 2) {
+    userinfo.amountsLeft = userinfo.amountsLeft.plus(event.params.amount);
+    challenge.leftTotalAmount = challenge.leftTotalAmount.plus(event.params.amount);
+  } else if(BigInt.fromI32(event.params.target).equals(BigInt.fromI32(2))) {
     //mid
-    let challenge = ChallengeInfo.load(event.params.challengeId.toString());
-    if (!challenge) {
-      challenge = new ChallengeInfo(event.params.challengeId.toString());
-    }
     if(event.params.tokenid.equals(challenge.tokenIdLeft)) {
-      userinfo.amountMiddleL.plus(event.params.amount);
+      userinfo.amountMiddleL = userinfo.amountMiddleL.plus(event.params.amount);
+      challenge.leftMiddleTotalAmount = challenge.leftMiddleTotalAmount.plus(event.params.amount);
     } 
 
     if(event.params.tokenid.equals(challenge.tokenIdRight)) {
-      userinfo.amountMiddleR.plus(event.params.amount);
+      userinfo.amountMiddleR = userinfo.amountMiddleR.plus(event.params.amount);
+      challenge.rightMiddleTotalAmount = challenge.rightMiddleTotalAmount.plus(event.params.amount);
     }
-  } else if(event.params.target === 3) {
+  } else if(BigInt.fromI32(event.params.target).equals(BigInt.fromI32(3))) {
     //right
-    userinfo.amountsRight.plus(event.params.amount);
+    userinfo.amountsRight = userinfo.amountsRight.plus(event.params.amount);
+    challenge.rightTotalAmount= challenge.rightTotalAmount.plus(event.params.amount);
   }
-  userinfo.save();
 
-
-  // challenges 
-  // let challenges = entity.challenges || [];
-  // challenges.push(userinfo.id || '');
-  // entity.challenges = challenges;
-  entity.challenges.push(userinfo.id || '')
-
+  let challenges = entity.challenges;
+  for(let i = 0; i < challenges.length; ++i) {
+    if(challenges[i] ===  userinfoId){
+      challenges[i] = userinfo.id;
+      break;
+    }
+    if(i === challenges.length - 1) {
+      challenges.push(userinfo.id)
+    }
+  }
+  if(challenges.length === 0) {
+    challenges.push(userinfo.id)
+  }
+  entity.challenges = challenges;
   entity.save();
+  userinfo.save();
+  challenge.save();
 }
 
 export function handleModificationAdmin(event: ModificationAdmin): void {
@@ -132,20 +141,20 @@ export function handleModifyChallenge(event: ModifyChallenge): void {
 
   if (!entity) {
     entity = new ChallengeInfo(event.params.challengeId.toString())
-    entity.ctype = event.params.ctype;
-    entity.winnerTarget = 0;
-    entity.placeId = event.params.placeId;
-    entity.matchId = event.params.matchId;
-    entity.startAt = event.params.startAt;
-    entity.endAt = event.params.endAt;
-    entity.openAt = BigInt.fromI32(0);
-    entity.tokenIdLeft = event.params.tokenIdLeft;
-    entity.tokenIdRight = event.params.tokenIdRight;
-    entity.leftTotalAmount = BigInt.fromI32(0);
-    entity.rightTotalAmount = BigInt.fromI32(0);
-    entity.leftMiddleTotalAmount = BigInt.fromI32(0);
-    entity.rightMiddleTotalAmount = BigInt.fromI32(0);
   }
+  entity.ctype = event.params.ctype;
+  entity.winnerTarget = 0;
+  entity.placeId = event.params.placeId;
+  entity.matchId = event.params.matchId;
+  entity.startAt = event.params.startAt;
+  entity.endAt = event.params.endAt;
+  entity.openAt = BigInt.fromI32(0);
+  entity.tokenIdLeft = event.params.tokenIdLeft;
+  entity.tokenIdRight = event.params.tokenIdRight;
+  entity.leftTotalAmount = BigInt.fromI32(0);
+  entity.rightTotalAmount = BigInt.fromI32(0);
+  entity.leftMiddleTotalAmount = BigInt.fromI32(0);
+  entity.rightMiddleTotalAmount = BigInt.fromI32(0);
   entity.save();
 }
 
@@ -154,9 +163,9 @@ export function handleOpenChallenge(event: OpenChallenge): void {
 
   if (!entity) {
     entity = new ChallengeInfo(event.params.challenageId.toString())
-    entity.winnerTarget = event.params.target;
-    entity.openAt = event.params.openTime;
   }
+  entity.winnerTarget = event.params.target;
+  entity.openAt = event.params.openTime;
   entity.save();
 }
 
