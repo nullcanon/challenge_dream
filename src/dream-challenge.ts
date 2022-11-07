@@ -9,31 +9,29 @@ import {
   OwnershipTransferred,
   WithdrawReward
 } from "../generated/DreamChallenge/DreamChallenge"
-import { ExampleEntity } from "../generated/schema"
+import { ChallengeInfo, UserInfo, UserInfos } from "../generated/schema"
 
 export function handleAddChallenge(event: AddChallenge): void {
-  // Entities can be loaded from the store using a string ID; this ID
-  // needs to be unique across all entities of the same type
-  let entity = ExampleEntity.load(event.transaction.from.toHex())
 
-  // Entities only exist after they have been saved to the store;
-  // `null` checks allow to create entities on demand
+  let entity = ChallengeInfo.load(event.params.challengeId.toString());
+
   if (!entity) {
-    entity = new ExampleEntity(event.transaction.from.toHex())
-
-    // Entity fields can be set using simple assignments
-    entity.count = BigInt.fromI32(0)
+    entity = new ChallengeInfo(event.params.challengeId.toString());
+    entity.ctype = event.params.ctype;
+    entity.winnerTarget = 0;
+    entity.placeId = event.params.placeId;
+    entity.matchId = event.params.matchId;
+    entity.startAt = event.params.startAt;
+    entity.endAt = event.params.endAt;
+    entity.openAt = BigInt.fromI32(0);
+    entity.tokenIdLeft = event.params.tokenIdLeft;
+    entity.tokenIdRight = event.params.tokenIdRight;
+    entity.leftTotalAmount = BigInt.fromI32(0);
+    entity.rightTotalAmount = BigInt.fromI32(0);
+    entity.leftMiddleTotalAmount = BigInt.fromI32(0);
+    entity.rightMiddleTotalAmount = BigInt.fromI32(0);
   }
-
-  // BigInt and BigDecimal math are supported
-  entity.count = entity.count + BigInt.fromI32(1)
-
-  // Entity fields can be set based on event parameters
-  entity.admin = event.params.admin
-  entity.ctype = event.params.ctype
-
-  // Entities can be written to the store with `.save()`
-  entity.save()
+  entity.save();
 
   // Note: If a handler doesn't require existing field values, it is faster
   // _not_ to load the entity from the store. Instead, create it fresh with
@@ -65,14 +63,105 @@ export function handleAddChallenge(event: AddChallenge): void {
   // - contract.teamNft(...)
 }
 
-export function handleEnterChallenge(event: EnterChallenge): void {}
+export function handleEnterChallenge(event: EnterChallenge): void {
+  let entity = UserInfos.load(event.params.user.toHexString());
+  
+  if (!entity) {
+    entity = new UserInfos(event.params.user.toHexString());
+    entity.challenges = []
+  }
 
-export function handleModificationAdmin(event: ModificationAdmin): void {}
+  let userinfo = UserInfo.load(
+    event.params.user
+    .toHexString()
+    .concat('-')
+    .concat(BigInt.fromI32(event.params.challengeId).toString())
+    );
+  if (!userinfo) {
+    userinfo = new UserInfo(    
+      event.params.user
+      .toHexString()
+      .concat('-')
+      .concat(BigInt.fromI32(event.params.challengeId).toString()));
 
-export function handleModifyChallenge(event: ModifyChallenge): void {}
+    userinfo.challenge = BigInt.fromI32(event.params.challengeId).toString();
+    userinfo.isTakeReward = false;
+    userinfo.amountsLeft = BigInt.fromI32(0);
+    userinfo.amountsRight = BigInt.fromI32(0);
+    userinfo.amountMiddleL = BigInt.fromI32(0);
+    userinfo.amountMiddleR = BigInt.fromI32(0);
+  }
 
-export function handleOpenChallenge(event: OpenChallenge): void {}
+  if(event.params.target === 1) {
+    //left
+    userinfo.amountsLeft.plus(event.params.amount);
+  } else if(event.params.target === 2) {
+    //mid
+    let challenge = ChallengeInfo.load(event.params.challengeId.toString());
+    if (!challenge) {
+      challenge = new ChallengeInfo(event.params.challengeId.toString());
+    }
+    if(event.params.tokenid.equals(challenge.tokenIdLeft)) {
+      userinfo.amountMiddleL.plus(event.params.amount);
+    } 
+
+    if(event.params.tokenid.equals(challenge.tokenIdRight)) {
+      userinfo.amountMiddleR.plus(event.params.amount);
+    }
+  } else if(event.params.target === 3) {
+    //right
+    userinfo.amountsRight.plus(event.params.amount);
+  }
+  userinfo.save();
+
+
+  // challenges 
+  // let challenges = entity.challenges || [];
+  // challenges.push(userinfo.id || '');
+  // entity.challenges = challenges;
+  entity.challenges.push(userinfo.id || '')
+
+  entity.save();
+}
+
+export function handleModificationAdmin(event: ModificationAdmin): void {
+}
+
+export function handleModifyChallenge(event: ModifyChallenge): void {
+  let entity = ChallengeInfo.load(event.params.challengeId.toString())
+
+  if (!entity) {
+    entity = new ChallengeInfo(event.params.challengeId.toString())
+    entity.ctype = event.params.ctype;
+    entity.winnerTarget = 0;
+    entity.placeId = event.params.placeId;
+    entity.matchId = event.params.matchId;
+    entity.startAt = event.params.startAt;
+    entity.endAt = event.params.endAt;
+    entity.openAt = BigInt.fromI32(0);
+    entity.tokenIdLeft = event.params.tokenIdLeft;
+    entity.tokenIdRight = event.params.tokenIdRight;
+    entity.leftTotalAmount = BigInt.fromI32(0);
+    entity.rightTotalAmount = BigInt.fromI32(0);
+    entity.leftMiddleTotalAmount = BigInt.fromI32(0);
+    entity.rightMiddleTotalAmount = BigInt.fromI32(0);
+  }
+  entity.save();
+}
+
+export function handleOpenChallenge(event: OpenChallenge): void {
+  let entity = ChallengeInfo.load(event.params.challenageId.toString())
+
+  if (!entity) {
+    entity = new ChallengeInfo(event.params.challenageId.toString())
+    entity.winnerTarget = event.params.target;
+    entity.openAt = event.params.openTime;
+  }
+  entity.save();
+}
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {}
 
-export function handleWithdrawReward(event: WithdrawReward): void {}
+export function handleWithdrawReward(event: WithdrawReward): void {
+
+}

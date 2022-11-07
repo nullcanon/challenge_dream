@@ -1,4 +1,4 @@
-specVersion: 0.0.1
+specVersion: 0.0.4
 schema:
   file: ./schema.graphql
 dataSources:
@@ -6,11 +6,12 @@ dataSources:
     name: DreamChallenge
     network: chapel
     source:
-      address: "0xCC94a43129d5c78fE36305dA63a8Ff332409ad49"
+      address: "0x532c950C5E009939F0F87F91C7325E78325Dc6c5"
       abi: DreamChallenge
+      startBlock: 24377696
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - AddChallenge
@@ -26,7 +27,7 @@ dataSources:
       eventHandlers:
         - event: AddChallenge(indexed address,uint8,uint16,uint16,uint16,uint256,uint256,uint256,uint256)
           handler: handleAddChallenge
-        - event: EnterChallenge(indexed address,uint16,uint256,uint256)
+        - event: EnterChallenge(indexed address,uint16,uint8,uint256,uint256)
           handler: handleEnterChallenge
         - event: ModificationAdmin(indexed address,bool,bool)
           handler: handleModificationAdmin

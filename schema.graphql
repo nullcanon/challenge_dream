@@ -1,6 +1,40 @@
-type ExampleEntity @entity {
-  id: ID!
-  count: BigInt!
-  admin: Bytes! # address
-  ctype: Int! # uint8
+enum Target {
+  NOMAL, LEFT, MIDDLE, RIGHT
+} 
+
+enum Ctype {
+  GROUP, KOUT
+} 
+
+type ChallengeInfo @entity {
+  id: ID! #challengeId
+  ctype: Int! #Ctype
+  winnerTarget: Int! #Target
+  placeId: Int! #uint16
+  matchId: Int! #uint16
+  startAt: BigInt!
+  endAt: BigInt!
+  openAt: BigInt!
+  tokenIdLeft: BigInt!
+  tokenIdRight: BigInt!
+  leftTotalAmount: BigInt!
+  rightTotalAmount: BigInt!
+  leftMiddleTotalAmount: BigInt!
+  rightMiddleTotalAmount: BigInt!
+}
+
+
+type UserInfo @entity {
+  id: ID! #userAddress-challengeId
+  challenge: ChallengeInfo!
+  amountsLeft: BigInt!
+  amountsRight: BigInt!
+  amountMiddleL: BigInt!
+  amountMiddleR: BigInt!
+  isTakeReward: Boolean!
+}
+
+type UserInfos @entity {
+  id: ID! #userAddress
+  challenges: [UserInfo!]
 }
