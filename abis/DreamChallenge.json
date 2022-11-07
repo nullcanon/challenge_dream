@@ -1,0 +1,615 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "admin",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "enum DreamChallenge.Ctype",
+        "name": "ctype",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "challengeId",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "placeId",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "matchId",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "startAt",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "endAt",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenIdLeft",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenIdRight",
+        "type": "uint256"
+      }
+    ],
+    "name": "AddChallenge",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "challengeId",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenid",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "EnterChallenge",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "admin",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "oldState",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "newState",
+        "type": "bool"
+      }
+    ],
+    "name": "ModificationAdmin",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "admin",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "enum DreamChallenge.Ctype",
+        "name": "ctype",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "challengeId",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "placeId",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "matchId",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "startAt",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "endAt",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenIdLeft",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenIdRight",
+        "type": "uint256"
+      }
+    ],
+    "name": "ModifyChallenge",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "admin",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "challenageId",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "enum DreamChallenge.Target",
+        "name": "target",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "openTime",
+        "type": "uint256"
+      }
+    ],
+    "name": "OpenChallenge",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "challageId",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "WithdrawReward",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "enum DreamChallenge.Ctype",
+        "name": "_ctype",
+        "type": "uint8"
+      },
+      { "internalType": "uint16", "name": "_placeId", "type": "uint16" },
+      { "internalType": "uint16", "name": "_matchId", "type": "uint16" },
+      { "internalType": "uint256", "name": "_startAt", "type": "uint256" },
+      { "internalType": "uint256", "name": "_endAt", "type": "uint256" },
+      { "internalType": "uint256", "name": "_tokenIdLeft", "type": "uint256" },
+      { "internalType": "uint256", "name": "_tokenIdRight", "type": "uint256" }
+    ],
+    "name": "addChallenge",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "challengeIdInex",
+    "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "token", "type": "address" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "emergencyWithdrawToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint16", "name": "_id", "type": "uint16" },
+      {
+        "internalType": "enum DreamChallenge.Target",
+        "name": "_target",
+        "type": "uint8"
+      },
+      { "internalType": "uint256", "name": "_tokenid", "type": "uint256" },
+      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
+    ],
+    "name": "enterChallenge",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint16", "name": "challengeId", "type": "uint16" }
+    ],
+    "name": "getChallengeInfo",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "enum DreamChallenge.Ctype",
+            "name": "ctype",
+            "type": "uint8"
+          },
+          {
+            "internalType": "enum DreamChallenge.Target",
+            "name": "winnerTarget",
+            "type": "uint8"
+          },
+          { "internalType": "uint16", "name": "id", "type": "uint16" },
+          { "internalType": "uint16", "name": "placeId", "type": "uint16" },
+          { "internalType": "uint16", "name": "matchId", "type": "uint16" },
+          { "internalType": "uint256", "name": "startAt", "type": "uint256" },
+          { "internalType": "uint256", "name": "endAt", "type": "uint256" },
+          { "internalType": "uint256", "name": "openAt", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "tokenIdLeft",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenIdRight",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "leftTotalAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "rightTotalAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "leftMiddleTotalAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "rightMiddleTotalAmount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct DreamChallenge.Challenge",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "account", "type": "address" },
+      { "internalType": "uint16", "name": "challengeId", "type": "uint16" }
+    ],
+    "name": "getUserChallengeInfo",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "uint16", "name": "challengeId", "type": "uint16" },
+          {
+            "internalType": "uint256",
+            "name": "amountsLeft",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountsRight",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountMiddleL",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountMiddleR",
+            "type": "uint256"
+          },
+          { "internalType": "bool", "name": "isTakeReward", "type": "bool" }
+        ],
+        "internalType": "struct DreamChallenge.UserInfo",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "account", "type": "address" }
+    ],
+    "name": "getUserChallenges",
+    "outputs": [
+      { "internalType": "uint256[]", "name": "", "type": "uint256[]" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "account", "type": "address" },
+      { "internalType": "uint16", "name": "challengeId", "type": "uint16" }
+    ],
+    "name": "getUserRewards",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "account", "type": "address" }
+    ],
+    "name": "isAdmin",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "admin", "type": "address" },
+      { "internalType": "bool", "name": "state", "type": "bool" }
+    ],
+    "name": "modificationAdmin",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint16", "name": "_cId", "type": "uint16" },
+      {
+        "internalType": "enum DreamChallenge.Ctype",
+        "name": "_ctype",
+        "type": "uint8"
+      },
+      { "internalType": "uint16", "name": "_placeId", "type": "uint16" },
+      { "internalType": "uint16", "name": "_matchId", "type": "uint16" },
+      { "internalType": "uint256", "name": "_startAt", "type": "uint256" },
+      { "internalType": "uint256", "name": "_endAt", "type": "uint256" },
+      { "internalType": "uint256", "name": "_tokenIdLeft", "type": "uint256" },
+      { "internalType": "uint256", "name": "_tokenIdRight", "type": "uint256" }
+    ],
+    "name": "modifyChallenge",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "nftCost",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "uint256[]", "name": "", "type": "uint256[]" },
+      { "internalType": "uint256[]", "name": "", "type": "uint256[]" },
+      { "internalType": "bytes", "name": "", "type": "bytes" }
+    ],
+    "name": "onERC1155BatchReceived",
+    "outputs": [{ "internalType": "bytes4", "name": "", "type": "bytes4" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "uint256", "name": "", "type": "uint256" },
+      { "internalType": "uint256", "name": "", "type": "uint256" },
+      { "internalType": "bytes", "name": "", "type": "bytes" }
+    ],
+    "name": "onERC1155Received",
+    "outputs": [{ "internalType": "bytes4", "name": "", "type": "bytes4" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint16", "name": "challengeId", "type": "uint16" },
+      {
+        "internalType": "enum DreamChallenge.Target",
+        "name": "winnerTarget",
+        "type": "uint8"
+      },
+      { "internalType": "uint256", "name": "time", "type": "uint256" }
+    ],
+    "name": "openChallenge",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "rewardToken",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
+    ],
+    "name": "setNftCost",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_token", "type": "address" }
+    ],
+    "name": "setRewardToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_nft", "type": "address" }
+    ],
+    "name": "setTeamNft",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" }
+    ],
+    "name": "supportsInterface",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "teamNft",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "newOwner", "type": "address" }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "nftContractAddress",
+        "type": "address"
+      },
+      { "internalType": "uint256[]", "name": "tokenids", "type": "uint256[]" },
+      { "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" }
+    ],
+    "name": "withdraw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint16", "name": "_challengeId", "type": "uint16" }
+    ],
+    "name": "withdrawReward",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
