@@ -12,6 +12,8 @@ type ChallengeInfo @entity {
   winnerTarget: Int! #Target
   placeId: Int! #uint16
   matchId: Int! #uint16
+  leftScore: Int!
+  rightScore: Int!
   startAt: BigInt!
   endAt: BigInt!
   openAt: BigInt!

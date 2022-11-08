@@ -78,6 +78,24 @@ export class ChallengeInfo extends Entity {
     this.set("matchId", Value.fromI32(value));
   }
 
+  get leftScore(): i32 {
+    let value = this.get("leftScore");
+    return value!.toI32();
+  }
+
+  set leftScore(value: i32) {
+    this.set("leftScore", Value.fromI32(value));
+  }
+
+  get rightScore(): i32 {
+    let value = this.get("rightScore");
+    return value!.toI32();
+  }
+
+  set rightScore(value: i32) {
+    this.set("rightScore", Value.fromI32(value));
+  }
+
   get startAt(): BigInt {
     let value = this.get("startAt");
     return value!.toBigInt();

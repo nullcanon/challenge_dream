@@ -19,6 +19,8 @@ export function handleAddChallenge(event: AddChallenge): void {
     entity = new ChallengeInfo(event.params.challengeId.toString());
     entity.ctype = event.params.ctype;
     entity.winnerTarget = 0;
+    entity.leftScore = 0;
+    entity.rightScore = 0;
     entity.placeId = event.params.placeId;
     entity.matchId = event.params.matchId;
     entity.startAt = event.params.startAt;
@@ -165,6 +167,8 @@ export function handleOpenChallenge(event: OpenChallenge): void {
   }
   entity.winnerTarget = event.params.target;
   entity.openAt = event.params.openTime;
+  entity.leftScore = event.params.leftScore;
+  entity.rightScore = event.params.rightScore;
   entity.save();
 }
 

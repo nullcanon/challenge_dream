@@ -191,12 +191,20 @@ export class OpenChallenge__Params {
     return this._event.parameters[1].value.toI32();
   }
 
-  get target(): i32 {
+  get leftScore(): i32 {
     return this._event.parameters[2].value.toI32();
   }
 
+  get rightScore(): i32 {
+    return this._event.parameters[3].value.toI32();
+  }
+
+  get target(): i32 {
+    return this._event.parameters[4].value.toI32();
+  }
+
   get openTime(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
+    return this._event.parameters[5].value.toBigInt();
   }
 }
 
@@ -269,40 +277,48 @@ export class DreamChallenge__getChallengeInfoResultValue0Struct extends ethereum
     return this[4].toI32();
   }
 
+  get leftScore(): i32 {
+    return this[5].toI32();
+  }
+
+  get rightScore(): i32 {
+    return this[6].toI32();
+  }
+
   get startAt(): BigInt {
-    return this[5].toBigInt();
-  }
-
-  get endAt(): BigInt {
-    return this[6].toBigInt();
-  }
-
-  get openAt(): BigInt {
     return this[7].toBigInt();
   }
 
-  get tokenIdLeft(): BigInt {
+  get endAt(): BigInt {
     return this[8].toBigInt();
   }
 
-  get tokenIdRight(): BigInt {
+  get openAt(): BigInt {
     return this[9].toBigInt();
   }
 
-  get leftTotalAmount(): BigInt {
+  get tokenIdLeft(): BigInt {
     return this[10].toBigInt();
   }
 
-  get rightTotalAmount(): BigInt {
+  get tokenIdRight(): BigInt {
     return this[11].toBigInt();
   }
 
-  get leftMiddleTotalAmount(): BigInt {
+  get leftTotalAmount(): BigInt {
     return this[12].toBigInt();
   }
 
-  get rightMiddleTotalAmount(): BigInt {
+  get rightTotalAmount(): BigInt {
     return this[13].toBigInt();
+  }
+
+  get leftMiddleTotalAmount(): BigInt {
+    return this[14].toBigInt();
+  }
+
+  get rightMiddleTotalAmount(): BigInt {
+    return this[15].toBigInt();
   }
 }
 
@@ -365,7 +381,7 @@ export class DreamChallenge extends ethereum.SmartContract {
   ): DreamChallenge__getChallengeInfoResultValue0Struct {
     let result = super.call(
       "getChallengeInfo",
-      "getChallengeInfo(uint16):((uint8,uint8,uint16,uint16,uint16,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256))",
+      "getChallengeInfo(uint16):((uint8,uint8,uint16,uint16,uint16,uint16,uint16,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256))",
       [ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(challengeId))]
     );
 
@@ -379,7 +395,7 @@ export class DreamChallenge extends ethereum.SmartContract {
   ): ethereum.CallResult<DreamChallenge__getChallengeInfoResultValue0Struct> {
     let result = super.tryCall(
       "getChallengeInfo",
-      "getChallengeInfo(uint16):((uint8,uint8,uint16,uint16,uint16,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256))",
+      "getChallengeInfo(uint16):((uint8,uint8,uint16,uint16,uint16,uint16,uint16,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256))",
       [ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(challengeId))]
     );
     if (result.reverted) {
@@ -632,6 +648,21 @@ export class DreamChallenge extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  rate(): BigInt {
+    let result = super.call("rate", "rate():(uint256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try_rate(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("rate", "rate():(uint256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   rewardToken(): Address {
@@ -1035,8 +1066,16 @@ export class OpenChallengeCall__Inputs {
     return this._call.inputValues[1].value.toI32();
   }
 
+  get leftScore(): i32 {
+    return this._call.inputValues[2].value.toI32();
+  }
+
+  get rightScore(): i32 {
+    return this._call.inputValues[3].value.toI32();
+  }
+
   get time(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
+    return this._call.inputValues[4].value.toBigInt();
   }
 }
 
@@ -1100,6 +1139,36 @@ export class SetNftCostCall__Outputs {
   _call: SetNftCostCall;
 
   constructor(call: SetNftCostCall) {
+    this._call = call;
+  }
+}
+
+export class SetRateCall extends ethereum.Call {
+  get inputs(): SetRateCall__Inputs {
+    return new SetRateCall__Inputs(this);
+  }
+
+  get outputs(): SetRateCall__Outputs {
+    return new SetRateCall__Outputs(this);
+  }
+}
+
+export class SetRateCall__Inputs {
+  _call: SetRateCall;
+
+  constructor(call: SetRateCall) {
+    this._call = call;
+  }
+
+  get _rate(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+}
+
+export class SetRateCall__Outputs {
+  _call: SetRateCall;
+
+  constructor(call: SetRateCall) {
     this._call = call;
   }
 }
