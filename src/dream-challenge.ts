@@ -144,18 +144,12 @@ export function handleModifyChallenge(event: ModifyChallenge): void {
     entity = new ChallengeInfo(event.params.challengeId.toString())
   }
   entity.ctype = event.params.ctype;
-  entity.winnerTarget = 0;
   entity.placeId = event.params.placeId;
   entity.matchId = event.params.matchId;
   entity.startAt = event.params.startAt;
   entity.endAt = event.params.endAt;
-  entity.openAt = BigInt.fromI32(0);
   entity.tokenIdLeft = event.params.tokenIdLeft;
   entity.tokenIdRight = event.params.tokenIdRight;
-  entity.leftTotalAmount = BigInt.fromI32(0);
-  entity.rightTotalAmount = BigInt.fromI32(0);
-  entity.leftMiddleTotalAmount = BigInt.fromI32(0);
-  entity.rightMiddleTotalAmount = BigInt.fromI32(0);
   entity.save();
 }
 
