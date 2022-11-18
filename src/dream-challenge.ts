@@ -170,4 +170,17 @@ export function handleOwnershipTransferred(event: OwnershipTransferred): void {}
 
 export function handleWithdrawReward(event: WithdrawReward): void {
 
+  let userinfoId = event.params.user
+  .toHexString()
+  .concat('-')
+  .concat(BigInt.fromI32(event.params.challageId).toString());
+
+  let userinfo = UserInfo.load(userinfoId);
+  if (!userinfo) {
+    userinfo = new UserInfo(userinfoId);
+  }
+  userinfo.isTakeReward = true;
+
+  userinfo.save();
+
 }

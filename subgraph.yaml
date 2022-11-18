@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: DreamChallenge
-    network: chapel
+    network: testnet
     source:
-      address: "0x63D83E058936dfA2ba9CB3ce3832C03851c7768d"
+      address: "0x9E2a1C931FFac0A740d076E7fD9796B2C7635CfE"
       abi: DreamChallenge
-      startBlock: 24434338
+      startBlock: 15443617
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
